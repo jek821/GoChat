@@ -1,4 +1,4 @@
-package server
+package Server
 
 import (
 	"net"
@@ -9,6 +9,7 @@ type Server struct {
 	Ip string 
 	Port string
 	Conn *net.Listener
+	ClientHandlers map[int]chan
 }
 
 func CreateServer(ip string, port string) *Server {
@@ -27,4 +28,15 @@ func (S Server) StartServer() error {
 	return nil
 }
 
+// Each New Client Connection will be assigned a unique ID
+// We then run another GoRoutine which is the client handler 
+// Each client handler is added to our Map of Client Handlers 
+// This Map contains the ID of each handler and its associated Channel to receive input
+func (S Server) ClientAccepter(){
+
+	 
+	
+
+
+	}
 
