@@ -9,7 +9,7 @@ type Server struct {
 	Ip string 
 	Port string
 	Conn *net.Listener
-	ClientHandlers map[int]chan
+	//ClientHandlers map[int] chan 
 }
 
 func CreateServer(ip string, port string) *Server {
