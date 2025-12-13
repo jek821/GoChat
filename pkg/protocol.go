@@ -38,7 +38,7 @@ type TestData struct{
 	Contents int
 }
 
-func (TD TestData) isData(){}
+func (TD *TestData) isData(){}
 
 
 
