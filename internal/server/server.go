@@ -1,19 +1,23 @@
 package Server
 
 import (
-	"net"
 	"GoChat/internal/logger"
+	"GoChat/pkg"
+	"net"
 )
 
 type Server struct {
 	Ip string 
 	Port string
 	Listener *net.Listener
-	//ClientHandlers map[int] chan 
+	//ClientHandlers map[int] chan
+	ChannelIn chan pkg.Transmission
+	IdCounter int32
+	
 }
 
 func CreateServer(ip string, port string) *Server {
-	return &Server{Ip: ip, Port: port}
+	return &Server{Ip: ip, Port: port, Listener: nil, ChannelIn: make(chan pkg.Transmission), IdCounter: 0}
 }
 
 func (S *Server) StartServer() error {
@@ -28,28 +32,20 @@ func (S *Server) StartServer() error {
 
 	defer logger.Logger.Info("Server Closed")
 
-	// Run in Loop
+// Run Connection Acceptance in Loop 
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
 			return err
 		}
-		go handleConn(conn)
-	}	
-
+		CreateNewHandler()
+		
 
 	return nil
 }
 
-// Each New Client Connection will be assigned a unique ID
-// We then run another GoRoutine which is the client handler 
-// Each client handler is added to our Map of Client Handlers 
-// This Map contains the ID of each handler and its associated Channel to receive input
-func (S Server) handleClient(){
 
 	 
 	
 
-
-	}
 
