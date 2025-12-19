@@ -10,7 +10,7 @@ type Server struct {
 	Ip string 
 	Port string
 	Listener *net.Listener
-	//ClientHandlers map[int] chan
+	ClientHandlers map[int32] chan pkg.Transmission
 	ChannelIn chan pkg.Transmission
 	IdCounter int32
 	
@@ -38,7 +38,15 @@ func (S *Server) StartServer() error {
 		if err != nil {
 			return err
 		}
-		CreateNewHandler()
+		//Increment ID Counter 
+		S.IdCounter++ 
+		NewHandlerChan := CreateNewHandler(S.ChannelIn, S.IdCounter, conn)
+
+		//Add New Handler ID and Chan to map
+		S.ClientHandlers[S.IdCounter] = NewHandlerChan
+		logger.Logger.Info("New Client Handler Spawned",
+												"ID", S.IdCounter)
+
 		
 
 	return nil
