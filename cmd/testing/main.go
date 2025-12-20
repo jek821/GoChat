@@ -11,20 +11,24 @@ func main() {
 
 func EncodeDecodeTest() {
 	pkg.Init()
-	testData :=	pkg.CreateTestData(5)
+	dataForTest := 5
+	testData :=	pkg.CreateTestData(dataForTest)
 	testTransmission :=	pkg.CreateTransmission(testData.DataCode, testData)
 	encodedTransmission, err := testTransmission.EncodeTransmission()
 	if err != nil {
-		fmt.Println("Failed to encode transmission")
+		fmt.Println("Failed Encoding Test")
 	}
 	decodedTransmission, err := pkg.DecodeTransmission(encodedTransmission)
 	if err != nil {
-		fmt.Println("failed to decode transmission")
+		fmt.Println("Failed Decoding Test")
 	}
 	switch decodedTransmission.Code {
 	case (pkg.TestDataCode):
 		TransmissionData := decodedTransmission.Data.(*pkg.TestData)
-		fmt.Println(TransmissionData.Contents)
-		
+		if (TransmissionData.Contents == dataForTest){
+		fmt.Println("Encode Decode Test Passed!")
+	}
+	default:
+	fmt.Println("Unknown Data type used in Encode Decode Testing")
 	}
 }
