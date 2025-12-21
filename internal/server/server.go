@@ -47,13 +47,7 @@ func (S *Server) StartServer() error {
 		logger.Logger.Info("New Client Handler Spawned",
 												"ID", S.IdCounter)
 
-		
-
-	return nil
 }
-
-
-	 
-	
+}
 
 

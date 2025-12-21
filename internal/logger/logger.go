@@ -1,4 +1,4 @@
-package logger 
+package logger
 
 import (
 	"log/slog"
@@ -8,6 +8,16 @@ import (
 var Logger *slog.Logger
 
 func init() {
-	Logger = slog.New(slog.NewTextHandler(os.Stdout, nil))
+	level := slog.LevelInfo // default: verbose
+
+	if os.Getenv("LOG_QUIET") == "1" {
+		level = slog.LevelWarn
+	}
+
+	handler := slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+		Level: level,
+	})
+
+	Logger = slog.New(handler)
 	slog.SetDefault(Logger)
 }

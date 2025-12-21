@@ -1,15 +1,21 @@
 package main
 
 import (
+	Server "GoChat/internal/server"
 	"GoChat/pkg"
 	"fmt"
 )
 
+
+var testIp = "127.0.0.1"
+var testPort = ":8080"
+
 func main() {
-	EncodeDecodeTest()
+	//EncodeDecodeTestData()
+	StartServerTest()
 }
 
-func EncodeDecodeTest() {
+func EncodeDecodeTestData() {
 	pkg.Init()
 	dataForTest := 5
 	testData :=	pkg.CreateTestData(dataForTest)
@@ -32,3 +38,19 @@ func EncodeDecodeTest() {
 	fmt.Println("Unknown Data type used in Encode Decode Testing")
 	}
 }
+
+
+
+func StartServerTest() {
+	server :=	Server.CreateServer(testIp, testPort)
+	err := server.StartServer()
+	if err != nil {
+		fmt.Println("ERROR IN START SERVER TEST")
+	}
+}
+
+func StarterServerClientConnectTest() {
+	server := Server.CreateServer(testIp, testPort)
+	err := server.StartServer()
+	if err != nil {
+		fmt.Println("ERROR IN START SERVER CLIENT CONNECT TEST") } }
