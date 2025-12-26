@@ -2,12 +2,14 @@ package Server
 
 import (
 	"GoChat/pkg"
-	"net")
+	"net"
+	"GoChat/internal/logger"
+	"fmt")
 
 type clientHandler struct {
 	Conn net.Conn
 	Id int32
-	inChan chan pkg.Transmission 
+	InChan chan pkg.Transmission 
 	outChan chan pkg.Transmission
 }
 
@@ -22,7 +24,33 @@ func CreateNewHandler(servChan chan pkg.Transmission, id int32, conn net.Conn) c
 
 }
 
+func (CH *clientHandler) RunAllReceivers() {
 
-func (CH *clientHandler) RunHandler(){
+}
+
+
+func (CH *clientHandler) RunServerReceiver() {
 // Run listen to in channel in loop
+	for t := range CH.InChan {
+		HandleTransmission(&t, CH.Id)
+	}
+}
+
+func (CH *clientHandler) RunClientReceiver() {
+
+	 
+}
+
+
+func HandleTransmission(T *pkg.Transmission, clientId int32) {
+	clientIdString := fmt.Sprintf("%d", clientId)
+	switch T.Code {
+	case pkg.TestDataCode:
+		//Logic for Handling TestData HandleTransmission()
+		logger.Logger.Info("Test Data Received","Handler ID: ", 
+												clientIdString,)	
+	default:
+		logger.Logger.Error("Unrecognized Transmission type received","Handler ID: ", clientIdString,)
+	}
+
 }
