@@ -86,6 +86,14 @@ func (s *Store) CreateUser(ctx context.Context, username string, passwordHash []
 	return userId, nil
 }
 
+func (s *Store) UpdatePasswordHash(ctx context.Context, userID int64, passwordHash []byte) error {
+	_, err := s.db.ExecContext(ctx,
+		`UPDATE users SET password_hash = ? WHERE user_id = ?`,
+		passwordHash, userID,
+	)
+	return err
+}
+
 // SetE2EKeyBundle stores the user's public key, encrypted private key, and Argon2 salt.
 // Called after the client generates a keypair (registration or key rotation).
 func (s *Store) SetE2EKeyBundle(ctx context.Context, userID int64, pubKey, encPrivKey, salt []byte) error {

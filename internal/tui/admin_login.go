@@ -1,6 +1,8 @@
 package tui
 
 import (
+	"strings"
+
 	"ByteChat/internal/client"
 
 	"github.com/charmbracelet/bubbles/textinput"
@@ -90,7 +92,7 @@ func (m adminLoginModel) Update(msg tea.Msg) (adminLoginModel, tea.Cmd) {
 }
 
 func (m adminLoginModel) submit() tea.Cmd {
-	user := m.inputs[0].Value()
+	user := strings.TrimSpace(m.inputs[0].Value())
 	pass := m.inputs[1].Value()
 	admin := m.admin
 	return func() tea.Msg {

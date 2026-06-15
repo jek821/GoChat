@@ -119,6 +119,20 @@ func (s *AuthService) Login(ctx context.Context, username, password string) (Aut
 	return result, nil
 }
 
+func (s *AuthService) SetPassword(ctx context.Context, userID int64, password string) error {
+	if password == "" {
+		return ErrInvalidInput
+	}
+	if len(password) < 8 {
+		return fmt.Errorf("%w: password must be at least 8 characters", ErrInvalidInput)
+	}
+	passwordHash, err := hashPassword(password)
+	if err != nil {
+		return err
+	}
+	return s.store.UpdatePasswordHash(ctx, userID, passwordHash)
+}
+
 func (s *AuthService) issueSession(ctx context.Context, userID int64) (string, error) {
 	token, tokenHash, err := newSessionToken()
 	if err != nil {

@@ -49,11 +49,17 @@ func main() {
 		if !ok || username == "" || password == "" {
 			log.Fatal("create-admin format must be username:password")
 		}
+		if len(password) < 8 {
+			log.Fatal("create-admin: password must be at least 8 characters")
+		}
+		if err := store.WipeAllData(context.Background()); err != nil {
+			log.Fatalf("reset database: %v", err)
+		}
 		if err := admin.CreateAdmin(context.Background(), username, password); err != nil {
 			log.Fatalf("create admin: %v", err)
 		}
-		logx.AdminAction("bootstrap", "admin user ready username="+username)
-		log.Printf("admin user %q is ready", username)
+		logx.AdminAction("bootstrap", "database reset admin user ready username="+username)
+		log.Printf("database reset; admin user %q is ready", username)
 	}
 
 	tlsOpts := server.TLSOptions{

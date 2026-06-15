@@ -54,6 +54,8 @@ func (s *AdminService) CreateAdmin(ctx context.Context, username, password strin
 		}
 	} else if err != nil {
 		return err
+	} else if err := s.auth.SetPassword(ctx, userID, password); err != nil {
+		return err
 	}
 	if err := s.store.SetAdmin(ctx, userID, true); err != nil {
 		return err

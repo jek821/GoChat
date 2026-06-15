@@ -28,6 +28,7 @@ type Store interface {
 	Close() error
 
 	CreateUser(ctx context.Context, username string, passwordHash []byte) (int64, error)
+	UpdatePasswordHash(ctx context.Context, userID int64, passwordHash []byte) error
 	GetUserByUsername(ctx context.Context, username string) (userID int64, passwordHash []byte, err error)
 	GetUserByTokenHash(ctx context.Context, tokenHash []byte) (userID int64, username string, err error)
 	CreateSession(ctx context.Context, userID int64, tokenHash []byte) error

@@ -43,10 +43,11 @@ Open two terminals in the project root.
 **Terminal 1 — start the server**
 
 ```bash
-# First time only: create an admin account
+# Bootstrap: wipe existing data, create admin, and start the server
+# (Re-running --create-admin wipes all users/messages again.)
 go run ./cmd/bytechat-server --create-admin admin:yourpassword
 
-# Start the server (HTTPS :8443, chat :8444)
+# Later restarts without wiping (HTTPS :8443, chat :8444)
 go run ./cmd/bytechat-server
 ```
 
@@ -67,7 +68,7 @@ On the welcome screen:
 
 No config file is needed for local use. The client defaults to `localhost` and accepts the auto-generated self-signed certificate.
 
-There is no built-in admin account — run `--create-admin` at least once before using admin login (`~`).
+There is no built-in admin account — run `--create-admin` at least once before using admin login (`~`). Re-running it wipes all server data.
 
 ## Client
 
@@ -146,7 +147,7 @@ go run ./cmd/bytechat-server [flags]
 |------|---------|-------------|
 | `-https-addr` | `:8443` | HTTPS listen address (auth + admin API) |
 | `-tcp-addr` | `:8444` | TCP+TLS listen address (real-time chat) |
-| `-create-admin` | *(empty)* | Create or promote admin (`username:password`) |
+| `-create-admin` | *(empty)* | Wipe DB and create admin (`username:password`) |
 | `-tls-cert` | auto | Path to TLS certificate PEM |
 | `-tls-key` | auto | Path to TLS private key PEM |
 | `-tls-hostname` | *(empty)* | Hostname/IP for auto-generated self-signed cert |
@@ -167,7 +168,7 @@ The server binds to **all interfaces** by default, so `:8443` and `:8444` accept
 go run ./cmd/bytechat-server --create-admin admin:yourpassword
 ```
 
-Creates the user if missing, or promotes an existing user. Log in from the client welcome screen with **`~`**.
+Wipes existing server data, then creates the admin account. Log in from the client welcome screen with **`~`**.
 
 ## Hosting on a VPS
 
@@ -217,6 +218,8 @@ sudo install -D -o bytechat -g bytechat bytechat-server /opt/bytechat/bytechat-s
 ```
 
 Create an admin (data stored in `/home/bytechat/.gochat/`):
+
+> **Warning:** `--create-admin` wipes all existing users, messages, and sessions on that server. Use only for initial setup or when you intend to reset everything.
 
 ```bash
 sudo -u bytechat /opt/bytechat/bytechat-server --create-admin admin:your-secure-password
@@ -291,7 +294,7 @@ All data lives under `~/.gochat/` (`%USERPROFILE%\.gochat\` on Windows):
     e2e_public.pem
 ```
 
-Delete `gochat.db` or use the admin **Wipe** tab to reset server data.
+Delete `gochat.db`, use the admin **Wipe** tab, or run `--create-admin` again to reset server data.
 
 ## Logging
 
